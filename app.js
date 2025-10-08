@@ -11,15 +11,33 @@ connectDatabase();
 
 // global middlware
 app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 
 import User from "./src/models/user.model.js";
 import bcrypt from "bcryptjs";
-app.post("/users", async (req, res) => {
-    try {
-        const { fullName, email, password, profileImage } = req.body;
+import multer from "multer";
 
-        if (!fullName || !email || !password || !profileImage) {
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, '/uploads')
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        cb(null, file.fieldname + '-' + uniqueSuffix)
+    }
+})
+
+const upload = multer({ storage: storage })
+
+
+app.post("/users", upload.single("profileImage"), async (req, res) => {
+    try {
+        console.log(req.file);
+        const { fullName, email, password } = req.body;
+        
+
+        if (!fullName || !email || !password) {
             return res.status(400).json({ success: false, message: "fields are missing" });
         }
 
@@ -39,7 +57,6 @@ app.post("/users", async (req, res) => {
         res.status(500).json({ success: false, message: "Internal Server Error" });
         console.log(error.message);
     }
-
 });
 
 app.delete("/users", async (req, res) => {

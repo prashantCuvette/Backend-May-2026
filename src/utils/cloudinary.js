@@ -11,19 +11,11 @@ cloudinary.config({
 
 // uploading image to cloudinary
 export const uploadImage = async (fileBuffer) => {
-
-    return new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream((error, result) => {
-            if (result) {
-                resolve(result);
-            }
-            else {
-                reject(error);
-            }
-            stream.end()
-        });
-
-    })
+try {
+    
+} catch (error) {
+    
+}
 
 };
 

@@ -12,9 +12,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
+// check route
+app.get("/", (req, res) => {
+    res.send("Working")
+})
+
 // routes
 import userRoutes from "./src/routes/users.route.js";
 app.use("/api/v1/users", userRoutes);
+// app.use("/api/v1/products", userRoutes);
 
 app.listen(4000, () => {
     console.log("Server Running on Port 4000");

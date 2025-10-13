@@ -10,7 +10,7 @@ export const signUpUser = async (req, res) => {
         const { fullName, email, password } = req.body;
         const profilePicture = req.file;
 
-        if (!fullName || !email || !password || !profilePicture) {
+        if (!fullName || !email || !password) {
             return res.status(400).json({ success: false, message: "fields are missing" });
         }
 
@@ -21,9 +21,9 @@ export const signUpUser = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const profilePictureResult = await uploadImage(profilePicture.path);
+        // const profilePictureResult = await uploadImage(profilePicture.path);
 
-        const newUser = new User({ fullName, email, password: hashedPassword, profileImage: profilePictureResult.secure_url });
+        const newUser = new User({ fullName, email, password: hashedPassword});
         await newUser.save();
 
         res.status(201).json({ success: true, message: "User Created Successfully", user: newUser })
